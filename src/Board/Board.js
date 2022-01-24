@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef } from "react";
 import {
   BsFillArrowLeftSquareFill,
   BsFillArrowRightSquareFill,
@@ -31,13 +31,13 @@ class LinkedList {
 }
 
 const Direction = {
-  UP: "UP",
+  UP: "UP", 
   RIGHT: "RIGHT",
   DOWN: "DOWN",
   LEFT: "LEFT",
 };
 
-const BOARD_SIZE = 13;
+const BOARD_SIZE = 20;
 const PROBABILITY_OF_DIRECTION_REVERSAL_FOOD = 0.3;
 
 const getStartingSnakeLLValue = (board) => {
@@ -259,6 +259,7 @@ const Board = () => {
   };
 
 
+  //reset the game
   const resetGame = () => {
     setScore(0);
     const snakeLLStartingValue = getStartingSnakeLLValue(board);
@@ -271,92 +272,97 @@ const Board = () => {
 
 
   return (
-    <Fragment>
-    <div className="bg">
-    <div className="navbar">
-    <div className="element">SNAKEGAME-LINKEDLIST</div>
-    <div className="element">HighScore : {highscore}</div>
+    <div class="flex flex-column items-center justify-center ">
+    <div className="mb-3 text-white"><h4>SnakeGame-LinkedList</h4></div>
+    <div class="flex flex-row items-center justify-center ">
+    <h5 className="text-white px-5 bg-indigo-700 ">Score : {score}</h5>
+    <h5 className="text-white px-5 bg-indigo-700"> HighScore : {highscore}</h5>
     </div>
-    {gameOver && (
-      <div className="infomessage">
-    <h3 className="gameovertext">!GAME OVER!</h3>
-    <h3 className="infotext">Press space key to re-start game</h3>
-    </div>
+
+    {gameOver && (    
+<div class=" flex flex-column text-red-600 items-center justify-center" role="alert">
+<p class="font-bold my-0">
+    Game Over
+</p>
+<p>
+    Press Space Key To Restart Game
+</p>
+</div>
+
     )}
-     {(!isRunning && !gameOver)&&(
-      <div className="infomessage">
-      <h3 className="infotext">Press any arrow key to start game</h3>
-      </div>
+    {(!isRunning && !gameOver)&&(
+      <div class=" flex flex-column text-green-600 items-center justify-center" role="alert">
+<p class="font-bold my-0">
+    Start Game    
+</p>
+<p>
+    Press Any Arrow Key To Start Game
+</p>
+</div>
     ) }
     {(isRunning && !gameOver)&&(
-      <div className="infomessage">
-      <h3 className="gamescore">SCORE : {score}</h3>
-      <h4 className="note">Note*: Purple cell reverse the sanke</h4>
-      </div>
+      <div class=" flex flex-column text-yellow-600 items-center justify-center" role="alert">
+<p class="font-bold my-0">
+    Note:
+</p>
+<p>
+    Red food reverse snake direction
+</p>
+</div>
     ) }
+    <div>
+    {board.map((row, rowIdx) => (
+    <div key={rowIdx} className="rowss">
+      {row.map((cellValue, cellIdx) => {
+        const className = getCellClassName(
+          cellValue,
+          foodCell,
+          foodShouldReverseDirection,
+          snakeCells
+        );
+        return <div key={cellIdx} className={className}></div>;
+      })}
+    </div>
+  ))}
 
-    
-    <div className="board">
-        {board.map((row, rowIdx) => (
-          <div key={rowIdx} className="rowss">
-            {row.map((cellValue, cellIdx) => {
-              const className = getCellClassName(
-                cellValue,
-                foodCell,
-                foodShouldReverseDirection,
-                snakeCells
-              );
-              return <div key={cellIdx} className={className}></div>;
-            })}
-          </div>
-        ))}
     </div>
+    <div className="m-5 mobile">
+    <span class="inline-grid grid-cols-3 gap-4">
+  <span></span>
+  <span><BsFillArrowUpSquareFill
+  className="buttonss "
+  onClick={() => handleKeydown(up)}
+/></span>
+  <span></span>
+  <span><BsFillArrowLeftSquareFill
+  className="buttonss "
+  onClick={() => handleKeydown(left)}
+/></span>
+  <span>
+  {gameOver && <BiSpaceBar
+  className="buttonss buttonssx"
+      onClick={() => resetGame()}
+  />}
+  </span>
+  <span><BsFillArrowRightSquareFill
+  className=" buttonss "
+  onClick={() => handleKeydown(right)}
+/></span>
+  <span></span>
+  <span><BsFillArrowDownSquareFill
+  className="buttonss "
+  onClick={() => handleKeydown(down)}
+/></span>
+  <span></span>
+</span>
+    </div>
+    <div className="p-4
+    inset-x-50
+    bottom-0 text-indigo-700">Created By - Sumit</div>	
+  </div>
+  )
 
-    <div className="arrowbutton">
-    <div></div>
-        <div>
-          <BsFillArrowUpSquareFill
-            className="buttonss "
-            onClick={() => handleKeydown(up)}
-          />
-        </div>
-        <div></div>
-        <div>
-          <BsFillArrowLeftSquareFill
-            className="buttonss "
-            onClick={() => handleKeydown(left)}
-          />
-        </div>
-        <div>
-        {gameOver && <BiSpaceBar
-        className="buttonss buttonssx"
-            onClick={() => resetGame()}
-        />}
-        </div>
-        <div>
-          <BsFillArrowRightSquareFill
-            className=" buttonss "
-            onClick={() => handleKeydown(right)}
-          />
-        </div>
-        <div></div>
-        <div>
-          <BsFillArrowDownSquareFill
-            className="buttonss "
-            onClick={() => handleKeydown(down)}
-          />
-        </div>
-        <div></div>
-    </div>
-   
-    
-    <div className="footer">
-    <h6 className="footertext">Created By @Sumit</h6>
-    </div>
-    </div>
-    </Fragment>
-  );
-};
+}
 
 //Creation of board
 const createBoard = (BOARD_SIZE) => {
